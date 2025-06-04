@@ -4,12 +4,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class CreateAuthToken {
+public class AuthToken {
     public static void main(String[] args) {
         getAuthToken();
     }
 
-    public static void getAuthToken(){
+    public static String getAuthToken(){
         //set up request specification
         //curl --location 'https://restful-booker.herokuapp.com/auth' \
         //--header 'Content-Type: application/json' \
@@ -39,12 +39,16 @@ public class CreateAuthToken {
         reqSpecs.body(body);
 
         //Make a request call and save response
-        Response response = reqSpecs.post(); //.then().log().all().extract().response();
+        Response response = reqSpecs
+//                .log().all()
+                .post().then()
+//                .log().all()
+                .extract().response();
 
         //use response obj to validate the response body or to extract any values
         //to get the token
-        response.getStatusLine(); //to get status line and status code
-        response.getStatusCode();
+        System.out.println("line"+response.getStatusLine()); //to get status line and status code
+        System.out.println("code"+response.getStatusCode());
 
         //to get response headers
         response.getHeaders();
@@ -59,5 +63,6 @@ public class CreateAuthToken {
         String token = response.jsonPath().get("token");
         System.out.println("Token value: "+ token);
 
+        return token;
     }
 }
